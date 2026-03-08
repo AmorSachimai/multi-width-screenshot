@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Multi-Width Screenshot Capture",
+  "version": "1.0.0",
+  "description": "ウェブページを複数の横幅で自動撮影し、ZIPで保存するブラウザ拡張機能。",
+  "permissions": [
+    "tabs",
+    "storage",
+    "activeTab",
+    "scripting",
+    "downloads",
+    "downloads",
+    "debugger"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}
