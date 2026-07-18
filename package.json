@@ -20,19 +20,19 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.16",
-    "@tailwindcss/vite": "^4.3.0",
-    "@types/chrome": "^0.1.42",
-    "@types/node": "^25.9.1",
-    "@types/react": "^19.2.16",
+    "@biomejs/biome": "^2.5.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/chrome": "^0.2.2",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.2",
-    "@vitest/coverage-v8": "^4.1.8",
-    "autoprefixer": "^10.5.0",
-    "chrome-types": "^0.1.429",
-    "tailwindcss": "^4.3.0",
-    "typescript": "~6.0.3",
-    "vite": "^8.0.16",
-    "vitest": "^4.1.8"
+    "@vitejs/plugin-react": "^6.0.3",
+    "@vitest/coverage-v8": "^4.1.10",
+    "autoprefixer": "^10.5.4",
+    "chrome-types": "^0.1.435",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~7.0.2",
+    "vite": "^8.1.5",
+    "vitest": "^4.1.10"
   }
 }
