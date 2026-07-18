@@ -9,29 +9,30 @@
     "lint": "biome check --unsafe",
     "format": "biome check --unsafe --write",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
     "preview": "vite preview"
   },
   "dependencies": {
     "jszip": "^3.10.1",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "zod": "^4.3.6"
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
-    "@tailwindcss/vite": "^4.2.1",
-    "@types/chrome": "^0.1.37",
-    "@types/node": "^24.10.1",
-    "@types/react": "^19.2.7",
+    "@biomejs/biome": "^2.4.16",
+    "@tailwindcss/vite": "^4.3.0",
+    "@types/chrome": "^0.1.42",
+    "@types/node": "^25.9.1",
+    "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "autoprefixer": "^10.4.27",
-    "chrome-types": "^0.1.422",
-    "tailwindcss": "^4.2.1",
-    "typescript": "~5.9.3",
-    "vite": "^8.0.0-beta.13"
-  },
-  "overrides": {
-    "vite": "^8.0.0-beta.13"
+    "@vitejs/plugin-react": "^6.0.2",
+    "@vitest/coverage-v8": "^4.1.8",
+    "autoprefixer": "^10.5.0",
+    "chrome-types": "^0.1.429",
+    "tailwindcss": "^4.3.0",
+    "typescript": "~6.0.3",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
   }
 }
