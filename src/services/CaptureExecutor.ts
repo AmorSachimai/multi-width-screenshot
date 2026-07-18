@@ -16,6 +16,14 @@ export const executeCapture = async (
   onStatusChange: (status: CaptureStatus) => void,
 ): Promise<void> => {
   const { id: tabId, windowId } = await tabRepo.getCurrentTab();
+
+  // Guard: Check if tab is still active
+  try {
+    await chrome.tabs.get(tabId);
+  } catch (_e) {
+    throw new Error("対象のタブが見つかりません。撮影を中止します。");
+  }
+
   const initialState = await tabRepo.getWindowState(windowId);
   console.log("Saved initial window state:", initialState);
 
@@ -50,7 +58,22 @@ export const executeCapture = async (
       // 1. Resize (As a hint for layout engines/media queries)
       const targetOuterWidth = width + frameDelta;
       await tabRepo.resizeWindow(windowId, targetOuterWidth, 1080);
+
+      // Verification: Wait and check if resize was successful
+      await new Promise((r) => setTimeout(r, 300));
+      const currentWindow = await tabRepo.getWindowState(windowId);
+      const currentWidth = currentWindow.width ?? 0;
+      if (Math.abs(currentWidth - targetOuterWidth) > 5) {
+        console.warn(
+          `Window resize precision issue: target ${targetOuterWidth}, actual ${currentWindow.width}`,
+        );
+        // If it's a Tiling Window Manager or Maximized, this might fail.
+        // We continue but log it.
+      }
+
       await tabRepo.reloadTab(tabId);
+      // Wait for reload to complete (simple delay as a starting point)
+      await new Promise((r) => setTimeout(r, 1000));
 
       // Get current viewport height for emulation
       const { innerHeight } = await tabRepo.executeScript(
@@ -70,6 +93,13 @@ export const executeCapture = async (
         await preScroll(tabId, settings.scrollDelayMs, tabRepo);
 
         // 4. CDP Full Page Capture
+        // Guard: Verify tab still exists before CDP call
+        try {
+          await chrome.tabs.get(tabId);
+        } catch (_e) {
+          throw new Error("撮影中にタブが閉じられました。");
+        }
+
         const dataUrl = await captureRepo.captureFullPage(tabId, {
           format: settings.imageFormat,
           quality: settings.quality,

@@ -133,7 +133,7 @@ const startZippingAndDownload = async (
       message:
         err instanceof Error
           ? err.message
-          : "ZIP generation or download failed",
+          : "ZIPの生成またはダウンロードに失敗しました。",
     });
   }
 };
@@ -146,10 +146,15 @@ const blobToDataUrl = async (blob: Blob): Promise<string> => {
       if (typeof result === "string") {
         resolve(result);
       } else {
-        reject(new Error("Failed to convert blob to data URL"));
+        reject(
+          new Error(
+            "データの変換に失敗しました（メモリ不足の可能性があります）。",
+          ),
+        );
       }
     };
-    reader.onerror = reject;
+    reader.onerror = () =>
+      reject(new Error("データの読み込みエラーが発生しました。"));
     reader.readAsDataURL(blob);
   });
 };

@@ -10,8 +10,32 @@ export const chromeCaptureService: CaptureRepository = {
     width: number,
     height: number,
   ): Promise<void> => {
+    // Check if it's a restricted page
+    const tab = await chrome.tabs.get(tabId);
+    if (
+      tab.url?.startsWith("chrome://") ||
+      tab.url?.startsWith("chrome-extension://") ||
+      tab.url?.startsWith("https://chrome.google.com/webstore")
+    ) {
+      throw new Error(
+        "ブラウザのセキュリティ制限により、このページでは撮影できません。",
+      );
+    }
+
     const target = { tabId };
-    await chrome.debugger.attach(target, "1.3");
+
+    // Check if already attached or other debugger errors
+    try {
+      await chrome.debugger.attach(target, "1.3");
+    } catch (e) {
+      const message = e instanceof Error ? e.message : String(e);
+      if (message.includes("Another debugger")) {
+        throw new Error(
+          "他の開発者ツールまたは拡張機能がこのタブを使用中のため、接続できません。",
+        );
+      }
+      throw new Error(`デバッガーの接続に失敗しました: ${message}`);
+    }
 
     // Set device metrics override to ensure exact viewport size
     await chrome.debugger.sendCommand(
@@ -54,7 +78,15 @@ export const chromeCaptureService: CaptureRepository = {
 
     const contentSize = metrics.contentSize || metrics.cssContentSize;
     if (!contentSize) {
-      throw new Error("Failed to get content size from metrics");
+      throw new Error("ページのサイズを取得できませんでした。");
+    }
+
+    // Safety limit: 30,000px height to prevent easy crashes
+    const MAX_HEIGHT = 30000;
+    if (contentSize.height > MAX_HEIGHT) {
+      throw new Error(
+        `ページが長すぎます（高さ: ${contentSize.height}px）。最大 ${MAX_HEIGHT}px まで撮影可能です。`,
+      );
     }
 
     console.log(
