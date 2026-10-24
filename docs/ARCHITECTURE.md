@@ -53,6 +53,7 @@ graph TD
 ## データモデル
 
 ### CaptureSettings
+
 ユーザー設定（`chrome.storage.local` に保存）。
 - `availableWidths`: 選択肢として表示する幅。
 - `selectedWidths`: 撮影対象として選択されている幅。
@@ -60,6 +61,7 @@ graph TD
 - `quality`: 0.0 ~ 1.0
 
 ### CaptureStatus (Discriminated Union)
+
 撮影の進行状態。UI の表示切り替えに使用。
 - `IDLE`: 待機中。
 - `PROCESSING`: 撮影中（現在の幅、進捗率を保持）。
